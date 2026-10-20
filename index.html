@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>findYOURgroove | Client Onboarding</title>
+<link rel="icon" type="image/png" href="fyg-logo-alt.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --primary:#008260;
+    --secondary:#EF810A;
+    --neutral:#E2E2E2;
+    --page-bg:#F2F2F2;
+    --accent:#E1F0EA;
+    --forest:var(--primary);
+    --teal:var(--primary);
+    --coral:var(--secondary);
+    --ink:#2C2A28;
+    --ink-soft:#6B6560;
+    --line:#D6D6D6;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--page-bg);
+    color:var(--ink);
+    font-family:'Figtree',sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 0 80px;}
+  header.hero{
+    background:var(--forest);
+    color:var(--neutral);
+    padding:32px 24px 32px;
+    text-align:center;
+  }
+  header.hero .brand-logo{
+    width:190px;
+    max-width:70%;
+    height:auto;
+    margin:0 0 10px;
+  }
+  header.hero .brand{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;
+    letter-spacing:0.02em;
+    font-size:clamp(30px,7vw,42px);
+    text-transform:none;
+    margin:0 0 6px;
+  }
+  header.hero .brand span.upper{text-transform:uppercase;}
+  header.hero .tagline{
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--secondary);
+    margin:0;
+  }
+  .intro{
+    padding:28px 24px 8px;
+  }
+  .intro h1{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:clamp(24px,5vw,30px);
+    font-weight:700;
+    margin:0 0 10px;
+    color:var(--forest);
+  }
+  .intro p{
+    font-size:15px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:0 0 8px;
+  }
+  .progress-bar{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:var(--page-bg);
+    padding:10px 24px;
+    border-bottom:1px solid var(--line);
+  }
+  .progress-track{
+    height:6px;
+    background:var(--accent);
+    border-radius:99px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--teal);
+    width:0%;
+    transition:width .3s ease;
+  }
+  .progress-label{
+    font-family:'DM Mono',monospace;
+    font-weight:500;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:8px;
+    letter-spacing:.05em;
+    -webkit-font-smoothing:antialiased;
+  }
+  section.card{
+    background:#fff;
+    margin:16px 24px;
+    border-radius:14px;
+    border-left:5px solid var(--teal);
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+    overflow:hidden;
+  }
+  section.card.coral{border-left-color:var(--coral);}
+  .card-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:18px 20px;
+    background:none;
+    border:none;
+    text-align:left;
+    cursor:pointer;
+    font-family:'Barlow Condensed',sans-serif;
+  }
+  .card-head .num{
+    font-family:'DM Mono',monospace;
+    font-weight:500;
+    font-size:12.5px;
+    color:var(--teal);
+    display:block;
+    margin-bottom:2px;
+    letter-spacing:.06em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .card-head .title{
+    font-size:20px;
+    font-weight:700;
+    color:var(--ink);
+    display:block;
+  }
+  .chev{
+    flex-shrink:0;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .25s ease;
+  }
+  .chev svg{width:11px;height:11px;}
+  section.card.open .chev{transform:rotate(180deg);}
+  .card-body{
+    display:none;
+    padding:0 20px 22px;
+  }
+  section.card.open .card-body{display:block;}
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;
+    font-family:'DM Mono',monospace;
+    font-weight:500;
+    font-size:12.5px;
+    line-height:1.5;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .field .hint{
+    font-family:'Figtree',sans-serif;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    text-transform:none;
+    letter-spacing:0;
+    display:block;
+    margin-top:2px;
+  }
+  input[type=text], input[type=tel], input[type=email], input[type=date], input[type=number], textarea, select{
+    width:100%;
+    font-family:'Figtree',sans-serif;
+    font-size:15px;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--neutral);
+    color:var(--ink);
+  }
+  textarea{min-height:70px;resize:vertical;}
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--teal);
+    outline-offset:1px;
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:480px){
+    .row2{grid-template-columns:1fr;}
+    .pillgroup, .checklist{flex-direction:column;align-items:stretch;}
+    .pill-wrap{width:100%;display:flex;}
+    .pill-wrap .pill{
+      width:100%;
+      text-align:center;
+      white-space:normal;
+      line-height:1.3;
+      border-radius:12px;
+    }
+    .yn-buttons{width:100%;}
+    .yn-buttons .pill-wrap{width:auto;flex:1;}
+  }
+  .pillgroup{display:flex;gap:10px 10px;flex-wrap:wrap;row-gap:12px;}
+  .pill{
+    font-family:'Figtree',sans-serif;
+    font-size:14px;
+    padding:9px 16px;
+    border-radius:99px;
+    border:1px solid var(--line);
+    background:var(--neutral);
+    color:var(--ink);
+    cursor:pointer;
+    user-select:none;
+  }
+  .pill-wrap input{
+    position:absolute;
+    opacity:0;
+    width:1px;height:1px;
+    pointer-events:none;
+  }
+  .pill.checked{
+    background:var(--teal);
+    border-color:var(--teal);
+    color:#fff;
+  }
+  .pill-wrap{position:relative;display:inline-flex;}
+  .yn-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .yn-row:last-child{border-bottom:none;}
+  .yn-row .q{font-size:14.5px;line-height:1.45;flex:1;}
+  .yn-buttons{display:flex;gap:6px;flex-shrink:0;}
+  .yn-buttons .pill{padding:7px 14px;font-size:13px;}
+  .followup{margin-top:8px;display:none;}
+  .followup.show{display:block;}
+  .checklist{display:flex;flex-wrap:wrap;gap:10px 10px;row-gap:12px;}
+  .note-box{
+    background:var(--accent);
+    border-radius:10px;
+    padding:14px 16px;
+    font-size:13.5px;
+    line-height:1.55;
+    color:var(--ink);
+    margin:6px 0 18px;
+  }
+  .note-box strong{color:var(--forest);}
+  .note-box a{color:var(--forest);}
+  .coach-note{
+    border-left:3px solid var(--coral);
+    padding:10px 14px;
+    background:var(--neutral);
+    font-style:italic;
+    font-size:14px;
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin-bottom:16px;
+    border-radius:0 8px 8px 0;
+  }
+  .consent-row{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-size:14px;
+    line-height:1.5;
+    margin:14px 0;
+  }
+  .consent-row input{width:18px;height:18px;margin-top:2px;flex-shrink:0;}
+  .footer-actions{
+    padding:20px 24px 0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .btn{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;
+    font-size:17px;
+    letter-spacing:.02em;
+    padding:15px 20px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    text-align:center;
+  }
+  .btn-primary{background:var(--forest);color:#fff;}
+  .btn-secondary{background:none;border:1px solid var(--ink-soft);color:var(--ink);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+  .save-status{
+    font-family:'DM Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    text-align:center;
+    letter-spacing:.03em;
+  }
+  .signoff{
+    text-align:center;
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:15px;
+    color:var(--forest);
+    padding:30px 24px 0;
+  }
+  @media print{
+    .progress-bar,.footer-actions,.chev,header.hero .tagline{display:none !important;}
+    .card-body{display:block !important;padding:0 20px 22px !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="fyg-logo.png" alt="findYOURgroove" class="brand-logo">
+  <p class="tagline">The goal isn't easy. The goal is better.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="intro">
+    <h1>Client Onboarding</h1>
+    <p>Before we build your program, we need the full picture: your running background, your health history, and what's going on in your life around training. Answer everything honestly. This is a confidential document between you and your coach, not a form to impress anyone.</p>
+    <p>It takes about 10-15 minutes. Your answers save automatically on this device as you go, so you can close this and come back.</p>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 of 8 sections started</div>
+  </div>
+
+  <form id="fygForm">
+
+    <!-- 1 PERSONAL -->
+    <section class="card open" data-section="1">
+      <button type="button" class="card-head">
+        <span><span class="num">01 / PERSONAL DETAILS</span><span class="title">Who you are</span></span>
+        <span class="chev"><svg viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="#008260" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="card-body">
+        <div class="field"><label>Full name</label><input type="text" name="full_name" autocomplete="name"></div>
+        <div class="field"><label>Preferred name</label><input type="text" name="preferred_name"></div>
+        <div class="row2">
+          <div class="field"><label>Date of birth</label><input type="date" name="dob"></div>
+          <div class="field"><label>Phone</label><input type="tel" name="phone"></div>
+        </div>
+        <div class="field"><label>Email</label><input type="email" name="email"></div>
+        <div class="field"><label>Suburb / area</label><input type="text" name="suburb" placeholder="e.g. Durbanville"></div>
+        <div class="field">
+          <label>Coaching format</label>
+          <div class="pillgroup" data-group="format">
+            <label class="pill-wrap"><input type="radio" name="format" value="Remote"><span class="pill">Remote</span></label>
+            <label class="pill-wrap"><input type="radio" name="format" value="In-person"><span class="pill">In-person (Cape Town / Durbanville)</span></label>
+            <label class="pill-wrap"><input type="radio" name="format" value="Hybrid"><span class="pill">Hybrid</span></label>
+          </div>
+        </div>
+        <div class="field"><label>Occupation</label><input type="text" name="occupation"></div>
+        <div class="field">
+          <label>Typical work schedule</label>
+          <div class="pillgroup" data-group="schedule">
+            <label class="pill-wrap"><input type="radio" name="schedule" value="Standard day hours"><span class="pill">Standard day hours</span></label>
+            <label class="pill-wrap"><input type="radio" name="schedule" value="Shift-based / rotating"><span class="pill">Shift-based / rotating</span></label>
+            <label class="pill-wrap"><input type="radio" name="schedule" value="Irregular"><span class="pill">Irregular</span></label>
+          </div>
+        </div>
+        <div class="field"><label>Emergency contact name</label><input type="text" name="ec_name"></div>
+        <div class="row2">
+          <div class="field"><label>Relationship</label><input type="text" name="ec_relationship"></div>
+          <div class="field"><label>Emergency contact phone</label><input type="tel" name="ec_phone"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 RUNNING GOALS -->
+    <section class="card" data-section="2">
+      <button type="button" class="card-head">
+        <span><span class="num">02 / RUNNING BACKGROUND</span><span class="title">Where you're starting from</span></span>
+        <span class="chev"><svg viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="#008260" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="card-body">
+        <div class="field">
+          <label>Running experience</label>
+          <div class="pillgroup" data-group="experience">
+            <label class="pill-wrap"><input type="radio" name="experience" value="Never run before"><span class="pill">Never run before</span></label>
+            <label class="pill-wrap"><input type="radio" name="experience" value="Returning after a break"><span class="pill">Returning after a break</span></label>
+            <label class="pill-wrap"><input type="radio" name="experience" value="Consistent beginner"><span class="pill">Consistent beginner</span></label>
+            <label class="pill-wrap"><input type="radio" name="experience" value="Intermediate"><span class="pill">Intermediate</span></label>
+            <label class="pill-wrap"><input type="radio" name="experience" value="Experienced"><span class="pill">Experienced</span></label>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Current weekly volume (km, or "none")</label><input type="text" name="weekly_km"></div>
+          <div class="field"><label>Longest run in the last 30 days (km)</label><input type="text" name="longest_run"></div>
+        </div>
+        <div class="field"><label>Primary goal right now</label>
+          <div class="pillgroup" data-group="goal">
+            <label class="pill-wrap"><input type="radio" name="goal" value="Complete my first 5km"><span class="pill">Complete my first 5km</span></label>
+            <label class="pill-wrap"><input type="radio" name="goal" value="Run a half marathon"><span class="pill">Run a half marathon</span></label>
+            <label class="pill-wrap"><input type="radio" name="goal" value="Run an ultra"><span class="pill">Run an ultra</span></label>
+            <label class="pill-wrap"><input type="radio" name="goal" value="Get back into running"><span class="pill">Get back into running</span></label>
+            <label class="pill-wrap"><input type="radio" name="goal" value="Improve speed / performance"><span class="pill">Improve speed / performance</span></label>
+            <label class="pill-wrap"><input type="radio" name="goal" value="Other"><span class="pill">Other</span></label>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Target race / event (if any)</label><input type="text" name="target_race"></div>
+          <div class="field"><label>Target date</label><input type="date" name="target_date"></div>
+        </div>
+        <div class="field"><label>Race history</label><textarea name="race_history" placeholder="Distances completed, approximate times, anything relevant"></textarea></div>
+        <div class="field"><label>What's driving this goal right now?</label><textarea name="why_now" placeholder="This helps me understand what's actually behind the goal"></textarea></div>
+      </div>
+    </section>
+
+    <!-- 3 HEALTH SCREENING -->
+    <section class="card coral" data-section="3">
+      <button type="button" class="card-head">
+        <span><span class="num">03 / HEALTH SCREENING</span><span class="title">Readiness for physical activity</span></span>
+        <span class="chev"><svg viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="#008260" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="card-body">
+        <div class="note-box">
+          These questions are based on standard pre-exercise screening practice. Answering "yes" to any of them doesn't disqualify you from coaching, it just means we check in with your doctor first and build around it. This form does not replace the official <strong>PAR-Q+</strong>. Please also complete the current PAR-Q+ at <a href="https://eparmedx.com" target="_blank" rel="noopener">eparmedx.com</a> and share it with your coach before your first session.
+        </div>
+
+        <div class="yn-row" data-yn="q1">
+          <span class="q">Has a doctor ever told you that you have a heart condition or cardiovascular disease?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q1" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q1" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q1"><textarea name="q1_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="yn-row" data-yn="q2">
+          <span class="q">Do you feel chest discomfort, pain, or unusual breathlessness during physical activity?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q2" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q2" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q2"><textarea name="q2_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="yn-row" data-yn="q3">
+          <span class="q">Have you experienced dizziness, fainting, or loss of consciousness in the past 12 months?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q3" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q3" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q3"><textarea name="q3_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="yn-row" data-yn="q4">
+          <span class="q">Do you have high blood pressure that is not well controlled by medication?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q4" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q4" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q4"><textarea name="q4_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="yn-row" data-yn="q5">
+          <span class="q">Do you have diabetes or another metabolic condition (thyroid, kidney, liver)?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q5" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q5" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q5"><textarea name="q5_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="yn-row" data-yn="q6">
+          <span class="q">Do you have asthma or another lung condition?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q6" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q6" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q6"><textarea name="q6_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="yn-row" data-yn="q7">
+          <span class="q">Do you have a bone or joint problem that could be made worse by increased training?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q7" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q7" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q7"><textarea name="q7_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="yn-row" data-yn="q8">
+          <span class="q">Is there any other reason a doctor has advised you to limit or avoid increasing your physical activity?</span>
+          <div class="yn-buttons"><label class="pill-wrap"><input type="radio" name="q8" value="Yes"><span class="pill">Yes</span></label><label class="pill-wrap"><input type="radio" name="q8" value="No"><span class="pill">No</span></label></div>
+        </div>
+        <div class="followup" data-followup="q8"><textarea name="q8_detail" placeholder="Please explain"></textarea></div>
+
+        <div class="field" style="margin-top:6px;"><label>Are you currently pregnant, or have you given birth in the last 12 months? (optional)</label>
+          <div class="pillgroup" data-group="pregnancy">
+            <label class="pill-wrap"><input type="radio" name="pregnancy" value="Yes"><span class="pill">Yes</span></label>
+            <label class="pill-wrap"><input type="radio" name="pregnancy" value="No"><span class="pill">No</span></label>
+            <label class="pill-wrap"><input type="radio" name="pregnancy" value="Prefer not to say"><span class="pill">Prefer not to say</span></label>
+          </div>
+        </div>
+
+        <div class="field"><label>Current medications</label><textarea name="medications" placeholder="Include anything hormonal, cardiovascular, or that affects training response"></textarea></div>
+        <div class="row2">
+          <div class="field"><label>Physician / GP name</label><input type="text" name="gp_name"></div>
+          <div class="field"><label>Physician phone (optional)</label><input type="tel" name="gp_phone"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 INJURY HISTORY -->
+    <section class="card" data-section="4">
+      <button type="button" class="card-head">
+        <span><span class="num">04 / INJURY & MOVEMENT HISTORY</span><span class="title">What your body has been through</span></span>
+        <span class="chev"><svg viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="#008260" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="card-body">
+        <div class="field">
+          <label>Past or recurring issues (select all that apply)</label>
+          <div class="checklist" data-group="injuries">
+            <label class="pill-wrap"><input type="checkbox" name="injury_itb" value="ITB syndrome"><span class="pill">ITB syndrome</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_shin" value="Shin splints / MTSS"><span class="pill">Shin splints / MTSS</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_pf" value="Plantar fasciitis"><span class="pill">Plantar fasciitis</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_ankle" value="Ankle sprain"><span class="pill">Ankle sprain</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_knee" value="Knee pain"><span class="pill">Knee pain</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_hip" value="Hip pain"><span class="pill">Hip pain</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_back" value="Lower back pain"><span class="pill">Lower back pain</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_stress" value="Stress fracture"><span class="pill">Stress fracture</span></label>
+            <label class="pill-wrap"><input type="checkbox" name="injury_none" value="None of the above"><span class="pill">None of the above</span></label>
+          </div>
+        </div>
+        <div class="field"><label>Anything currently sore, tight, or nagging?</label><textarea name="current_pain"></textarea></div>
+        <div class="field"><label>Past surgeries</label><textarea name="surgeries"></textarea></div>
+        <div class="field"><label>Anything you already know about your own biomechanics?</label><textarea name="biomechanics" placeholder="e.g. leg length difference, flat feet, previous physio or podiatrist assessment"></textarea></div>
+      </div>
+    </section>
+
+    <!-- 5 LIFESTYLE -->
+    <section class="card" data-section="5">
+      <button type="button" class="card-head">
+        <span><span class="num">05 / LIFESTYLE</span><span class="title">The stuff around the running</span></span>
+        <span class="chev"><svg viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="#008260" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="card-body">
+        <div class="row2">
+          <div class="field"><label>Average sleep per night</label><input type="text" name="sleep_hours" placeholder="e.g. 6-7 hours"></div>
+          <div class="field"><label>Sleep quality</label>
+            <div class="pillgroup" data-group="sleep_quality">
+              <label class="pill-wrap"><input type="radio" name="sleep_quality" value="Poor"><span class="pill">Poor</span></label>
+              <label class="pill-wrap"><input type="radio" name="sleep_quality" value="Fair"><span class="pill">Fair</span></label>
+              <label class="pill-wrap"><input type="radio" name="sleep_quality" value="Good"><span class="pill">Good</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="field"><label>Typical stress level</label>
+          <div class="pillgroup" data-group="stress">
+            <label class="pill-wrap"><input type="radio" name="stress" value="Low"><span class="pill">Low</span></label>
+            <label class="pill-wrap"><input type="radio" name="stress" value="Moderate"><span class="pill">Moderate</span></label>
+            <label class="pill-wrap"><input type="radio" name="stress" value="High"><span class="pill">High</span></label>
+          </div>
+        </div>
+        <div class="field"><label>Typical eating pattern</label><textarea name="nutrition" placeholder="Roughly what a normal day of eating looks like"></textarea></div>
+        <div class="row2">
+          <div class="field"><label>Alcohol</label>
+            <div class="pillgroup" data-group="alcohol">
+              <label class="pill-wrap"><input type="radio" name="alcohol" value="None"><span class="pill">None</span></label>
+              <label class="pill-wrap"><input type="radio" name="alcohol" value="Occasional"><span class="pill">Occasional</span></label>
+              <label class="pill-wrap"><input type="radio" name="alcohol" value="Regular"><span class="pill">Regular</span></label>
+            </div>
+          </div>
+          <div class="field"><label>Caffeine per day</label><input type="text" name="caffeine" placeholder="e.g. 2 cups coffee"></div>
+        </div>
+        <div class="field"><label>Other training or activity (gym, cross-training, sport)</label><textarea name="cross_training"></textarea></div>
+      </div>
+    </section>
+
+    <!-- 6 ADDITIONAL -->
+    <section class="card" data-section="6">
+      <button type="button" class="card-head">
+        <span><span class="num">06 / ANYTHING ELSE</span><span class="title">Additional context (optional)</span></span>
+        <span class="chev"><svg viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="#008260" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="card-body">
+        <div class="field"><label>Anything hormonal, cyclical, or medication-related you'd like factored into your training? (optional)</label><textarea name="hormonal_notes" placeholder="Only share what's useful for your coach to know"></textarea></div>
+        <div class="field"><label>Anything else your coach should know before you start</label><textarea name="anything_else"></textarea></div>
+      </div>
+    </section>
+
+    <!-- 7 SCOPE + CONSENT -->
+    <section class="card coral" data-section="7">
+      <button type="button" class="card-head">
+        <span><span class="num">07 / SCOPE & CONSENT</span><span class="title">How coaching works</span></span>
+        <span class="chev"><svg viewBox="0 0 12 8" fill="none"><path d="M1 1L6 6L11 1" stroke="#008260" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </button>
+      <div class="card-body">
+        <div class="coach-note">
+          findYOURgroove coaches movement, training load, and recovery. We do not diagnose injuries or medical conditions. If something feels sharp, localized, or doesn't resolve within 48 hours, or keeps returning, we'll point you to a physio or doctor before continuing to load it.
+        </div>
+        <div class="note-box">
+          If you answered "yes" to anything in Section 03, please complete the official <strong>PAR-Q+</strong> at <a href="https://eparmedx.com" target="_blank" rel="noopener">eparmedx.com</a> and get medical clearance before your first session. Your coach cannot start programming until that's in place.
+        </div>
+        <label class="consent-row">
+          <input type="checkbox" name="consent_accurate">
+          <span>I confirm the information above is accurate to the best of my knowledge.</span>
+        </label>
+        <label class="consent-row">
+          <input type="checkbox" name="consent_scope">
+          <span>I understand findYOURgroove coaching is not a substitute for medical advice, and that I'm responsible for completing the PAR-Q+ and seeking medical clearance if any screening question applies to me.</span>
+        </label>
+        <div class="row2">
+          <div class="field"><label>Typed signature (full name)</label><input type="text" name="signature"></div>
+          <div class="field"><label>Date</label><input type="date" name="sign_date"></div>
+        </div>
+      </div>
+    </section>
+
+  </form>
+
+  <div class="footer-actions">
+    <button type="button" class="btn btn-primary" id="sendBtn">Send to coach (email)</button>
+    <button type="button" class="btn btn-secondary" id="whatsappBtn">Send to coach (WhatsApp)</button>
+    <button type="button" class="btn btn-secondary" id="printBtn">Print / save as PDF</button>
+    <p class="save-status" id="saveStatus">Draft saves automatically on this device</p>
+  </div>
+
+  <p class="signoff">The goal isn't easy. The goal is better.</p>
+
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('fygForm');
+  var STORAGE_KEY = 'fyg_onboarding_draft_v1';
+
+  // Accordion behaviour
+  var cards = document.querySelectorAll('section.card');
+  cards.forEach(function(card){
+    var head = card.querySelector('.card-head');
+    function toggle(e){
+      e.preventDefault();
+      card.classList.toggle('open');
+    }
+    head.addEventListener('click', toggle);
+    head.addEventListener('touchend', toggle);
+  });
+
+  // Pill toggle visuals for radios / checkboxes
+  form.addEventListener('change', function(e){
+    var target = e.target;
+    if(target.tagName === 'INPUT' && (target.type === 'radio' || target.type === 'checkbox')){
+      var name = target.name;
+      var groupInputs = form.querySelectorAll('input[name="' + name + '"]');
+      groupInputs.forEach(function(inp){
+        var pill = inp.parentElement.querySelector('.pill');
+        if(inp.type === 'checkbox'){
+          if(pill) pill.classList.toggle('checked', inp.checked);
+        } else {
+          if(pill) pill.classList.toggle('checked', inp.checked);
+        }
+      });
+      // Y/N followups
+      var ynRow = target.closest('.yn-row');
+      if(ynRow){
+        var qname = ynRow.getAttribute('data-yn');
+        var followup = form.querySelector('.followup[data-followup="' + qname + '"]');
+        if(followup){
+          followup.classList.toggle('show', target.value === 'Yes');
+        }
+      }
+      saveDraft();
+      updateProgress();
+    }
+  });
+  form.addEventListener('input', function(e){
+    if(e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT'){
+      saveDraft();
+      updateProgress();
+    }
+  });
+
+  function collectData(){
+    var data = {};
+    var elements = form.elements;
+    for(var i=0;i<elements.length;i++){
+      var el = elements[i];
+      if(!el.name) continue;
+      if(el.type === 'radio'){
+        if(el.checked) data[el.name] = el.value;
+      } else if(el.type === 'checkbox'){
+        if(!data[el.name]) data[el.name] = [];
+        if(el.checked) data[el.name] = el.value;
+      } else {
+        data[el.name] = el.value;
+      }
+    }
+    return data;
+  }
+
+  function saveDraft(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
+      var status = document.getElementById('saveStatus');
+      status.textContent = 'Draft saved ' + new Date().toLocaleTimeString();
+    }catch(err){}
+  }
+
+  function loadDraft(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return;
+      var data = JSON.parse(raw);
+      Object.keys(data).forEach(function(name){
+        var val = data[name];
+        var els = form.querySelectorAll('[name="' + name + '"]');
+        els.forEach(function(el){
+          if(el.type === 'radio' || el.type === 'checkbox'){
+            el.checked = (el.value === val);
+            var pill = el.parentElement.querySelector('.pill');
+            if(pill) pill.classList.toggle('checked', el.checked);
+          } else {
+            el.value = val;
+          }
+        });
+      });
+      // restore followup visibility
+      form.querySelectorAll('.yn-row').forEach(function(row){
+        var qname = row.getAttribute('data-yn');
+        var checkedYes = form.querySelector('input[name="'+qname+'"][value="Yes"]');
+        var followup = form.querySelector('.followup[data-followup="' + qname + '"]');
+        if(checkedYes && checkedYes.checked && followup){
+          followup.classList.add('show');
+        }
+      });
+      updateProgress();
+    }catch(err){}
+  }
+
+  function updateProgress(){
+    var data = collectData();
+    var totalSections = 8;
+    var filledSections = 0;
+    cards.forEach(function(card){
+      var body = card.querySelector('.card-body');
+      var inputs = body.querySelectorAll('input, textarea');
+      var anyFilled = false;
+      inputs.forEach(function(inp){
+        if(inp.type === 'radio' || inp.type === 'checkbox'){
+          if(inp.checked) anyFilled = true;
+        } else if(inp.value && inp.value.trim().length){
+          anyFilled = true;
+        }
+      });
+      if(anyFilled) filledSections++;
+    });
+    var pct = Math.round((filledSections / totalSections) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = filledSections + ' of ' + totalSections + ' sections started';
+  }
+
+  function buildSummary(){
+    var d = collectData();
+    var lines = [];
+    lines.push('FINDYOURGROOVE CLIENT ONBOARDING');
+    lines.push('Submitted: ' + new Date().toLocaleString());
+    lines.push('');
+    lines.push('--- PERSONAL ---');
+    lines.push('Name: ' + (d.full_name||'') + ' (' + (d.preferred_name||'') + ')');
+    lines.push('DOB: ' + (d.dob||''));
+    lines.push('Phone: ' + (d.phone||''));
+    lines.push('Email: ' + (d.email||''));
+    lines.push('Suburb: ' + (d.suburb||''));
+    lines.push('Format: ' + (d.format||''));
+    lines.push('Occupation: ' + (d.occupation||''));
+    lines.push('Work schedule: ' + (d.schedule||''));
+    lines.push('Emergency contact: ' + (d.ec_name||'') + ' (' + (d.ec_relationship||'') + ') ' + (d.ec_phone||''));
+    lines.push('');
+    lines.push('--- RUNNING BACKGROUND ---');
+    lines.push('Experience: ' + (d.experience||''));
+    lines.push('Current weekly km: ' + (d.weekly_km||''));
+    lines.push('Longest run (30 days): ' + (d.longest_run||''));
+    lines.push('Primary goal: ' + (d.goal||''));
+    lines.push('Target race: ' + (d.target_race||'') + ' on ' + (d.target_date||''));
+    lines.push('Race history: ' + (d.race_history||''));
+    lines.push('Why now: ' + (d.why_now||''));
+    lines.push('');
+    lines.push('--- HEALTH SCREENING ---');
+    var qMap = {
+      q1:'Heart condition / cardiovascular disease',
+      q2:'Chest discomfort or breathlessness during activity',
+      q3:'Dizziness / fainting in last 12 months',
+      q4:'Uncontrolled high blood pressure',
+      q5:'Diabetes or metabolic condition',
+      q6:'Asthma or lung condition',
+      q7:'Bone or joint problem',
+      q8:'Other doctor-advised limitation'
+    };
+    Object.keys(qMap).forEach(function(k){
+      lines.push(qMap[k] + ': ' + (d[k]||'') + (d[k+'_detail'] ? ' - ' + d[k+'_detail'] : ''));
+    });
+    lines.push('Pregnant / postpartum (12mo): ' + (d.pregnancy||''));
+    lines.push('Medications: ' + (d.medications||''));
+    lines.push('GP: ' + (d.gp_name||'') + ' ' + (d.gp_phone||''));
+    lines.push('');
+    lines.push('--- INJURY & MOVEMENT HISTORY ---');
+    var injuryFields = ['injury_itb','injury_shin','injury_pf','injury_ankle','injury_knee','injury_hip','injury_back','injury_stress','injury_none'];
+    var injuriesSelected = injuryFields.filter(function(f){return d[f];}).map(function(f){return d[f];});
+    lines.push('Selected: ' + (injuriesSelected.join(', ') || 'None selected'));
+    lines.push('Current pain: ' + (d.current_pain||''));
+    lines.push('Surgeries: ' + (d.surgeries||''));
+    lines.push('Biomechanics notes: ' + (d.biomechanics||''));
+    lines.push('');
+    lines.push('--- LIFESTYLE ---');
+    lines.push('Sleep: ' + (d.sleep_hours||'') + ' / quality: ' + (d.sleep_quality||''));
+    lines.push('Stress: ' + (d.stress||''));
+    lines.push('Nutrition: ' + (d.nutrition||''));
+    lines.push('Alcohol: ' + (d.alcohol||'') + ' / Caffeine: ' + (d.caffeine||''));
+    lines.push('Cross-training: ' + (d.cross_training||''));
+    lines.push('');
+    lines.push('--- ADDITIONAL ---');
+    lines.push('Hormonal / cyclical notes: ' + (d.hormonal_notes||''));
+    lines.push('Anything else: ' + (d.anything_else||''));
+    lines.push('');
+    lines.push('--- CONSENT ---');
+    lines.push('Confirmed accurate: ' + (d.consent_accurate ? 'Yes' : 'No'));
+    lines.push('Confirmed scope understanding: ' + (d.consent_scope ? 'Yes' : 'No'));
+    lines.push('Signature: ' + (d.signature||'') + ' Date: ' + (d.sign_date||''));
+    return lines.join('\n');
+  }
+
+  document.getElementById('sendBtn').addEventListener('click', function(){
+    var summary = buildSummary();
+    var subject = encodeURIComponent('FYG Onboarding - ' + (form.full_name.value || 'New client'));
+    var body = encodeURIComponent(summary);
+    window.location.href = 'mailto:fygcoaching@gmail.com?subject=' + subject + '&body=' + body;
+  });
+  document.getElementById('sendBtn').addEventListener('touchend', function(e){
+    e.preventDefault();
+    document.getElementById('sendBtn').click();
+  });
+
+  document.getElementById('whatsappBtn').addEventListener('click', function(){
+    var summary = buildSummary();
+    var coachNumber = '27793605971';
+    var text = encodeURIComponent(summary);
+    window.open('https://wa.me/' + coachNumber + '?text=' + text, '_blank');
+  });
+  document.getElementById('whatsappBtn').addEventListener('touchend', function(e){
+    e.preventDefault();
+    document.getElementById('whatsappBtn').click();
+  });
+
+  document.getElementById('printBtn').addEventListener('click', function(){
+    cards.forEach(function(card){ card.classList.add('open'); });
+    setTimeout(function(){ window.print(); }, 200);
+  });
+  document.getElementById('printBtn').addEventListener('touchend', function(e){
+    e.preventDefault();
+    document.getElementById('printBtn').click();
+  });
+
+  loadDraft();
+  updateProgress();
+})();
+</script>
+
+</body>
+</html>
